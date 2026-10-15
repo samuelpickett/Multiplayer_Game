@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiz Show — Host</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="host.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <p><span class="logo">✦</span> QUIZ SHOW</p>
+      <p id="status">Connecting to the game server...</p>
+    </header>
+
+    <section id="lobby" hidden>
+      <h3>
+        Ready to 
+        <em>Play?</em>  
+      </h3>
+        <p class="join-address">Join address: <a id="join-link" href="#"></a></p>
+
+      <div class="code_and_players">
+
+        <div class="qr_code">
+          <img id="join-qr" alt="QR code for the player join page" width="220" height="220">
+        </div>
+        
+        <div class="players">
+          <p>Players: <span id="player-count">0</span></p>
+          <ol id="player-list"></ol>
+        </div>
+      </div>
+      <div class="button">
+        <button id="start-button" type="button" disabled>
+          Start game <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="round" hidden>
+      <h2>Question <span id="question-number"></span> of <span id="question-count"></span></h2>
+      <p id="timer"></p>
+      <h3 id="question-prompt"></h3>
+      <ol id="choices"></ol>
+      <p id="answer-count"></p>
+      <p id="correct-answer" hidden></p>
+    </section>
+
+    <section id="results" hidden>
+      <div class="podium">
+        <div class="final_standings">
+          <h2>AND THE WINNER IS</h2>
+          <p id="winner"></p>
+        </div>
+        <div class="top_five">
+          <p>TOP FIVE</p>
+          <ol id="top-five"></ol>
+        </div>
+      </div>
+
+      <div class="button">
+        <button id="reset-button" type="button">New game</button>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

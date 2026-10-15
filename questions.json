@@ -1,0 +1,17 @@
+[
+  {
+    "prompt": "Which planet is known as the Red Planet?",
+    "choices": ["Venus", "Mars", "Jupiter", "Mercury"],
+    "answer": 1
+  },
+  {
+    "prompt": "How many sides does a hexagon have?",
+    "choices": ["Five", "Six", "Seven", "Eight"],
+    "answer": 1
+  },
+  {
+    "prompt": "Which language runs in a web browser?",
+    "choices": ["Python", "JavaScript", "SQL", "Bash"],
+    "answer": 1
+  }
+]

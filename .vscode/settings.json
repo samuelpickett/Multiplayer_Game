@@ -1,0 +1,6 @@
+{
+  "liveServer.settings.port": 5500,
+  "liveServer.settings.host": "127.0.0.1",
+  "liveServer.settings.AdvanceCustomBrowserCmdLine": "C:\\Users\\samue\\CSE-381\\Multiplayer_Game\\launch-game.cmd",
+  "python-envs.defaultEnvManager": "ms-python.python:system"
+}

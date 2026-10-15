@@ -1,0 +1,275 @@
+/* Layout only. Add your own colors, type, spacing, and visual effects here. */
+* { 
+    box-sizing: border-box; 
+}
+
+[hidden] { 
+    display: none !important; 
+}
+
+/* Styles for each screen */
+
+body {
+    margin: 0; 
+    padding: 0;
+    width: 100%;
+    min-height: 555px;
+    font-family: sans-serif; 
+    --canvas: #111126; 
+    --surface: #1c1b3a; 
+    --surface-2: #26234a; 
+    --ink: #f7f7ff; 
+    --muted: #b7b4d5; 
+    --accent: #b6ff60; 
+    --accent-ink: #111428; 
+    --accent-2: #ad76ff; 
+    --line: #ffffff2e; 
+    --radius: 24px; 
+    --font: Arial, Helvetica, sans-serif; 
+    --display: Arial, Helvetica, sans-serif; 
+    background: var(--canvas); 
+    color: var(--ink); 
+    font-family: var(--font);
+    background-image: radial-gradient(circle at 74% 50%, #5a3a9c7d, transparent 38%), 
+                    radial-gradient(circle at 10% 53%, #153b5370, transparent 50%);
+
+}
+
+body::after{
+    content: "";
+    position: absolute;
+    right: 10px;
+    top: 90px;
+    width: 530px;
+    height: 530px;
+    border: 1px solid #b197ff36;
+    border-radius: 50%;
+    box-shadow: 0 0 0 60px #a07bff0c, 0 0 0 135px #a07bff07;
+    pointer-events: none;
+}
+
+main { 
+    width: min(100% - 2rem, 800px); 
+    margin: 2rem auto; 
+    
+}
+
+header { 
+    margin-bottom: 2rem; 
+    font-size: 16px;
+    font-weight: 800;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+section { 
+    margin-block: 2rem; 
+}
+
+.logo{
+    color: var(--accent);
+    font-size: 24px;
+    padding-right: 10px;
+}
+
+
+#start-button, #reset-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 26px;
+    padding: 14px 20px;
+    border: 0;
+    border-radius: calc(var(--radius) / 2);
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: 14px;
+    font-weight: 900;
+    box-shadow: 0 0 28px #b6ff6054;
+    max-width: fit-content;
+}
+.button{
+    display: flex;
+    justify-content: end;
+    padding-right: 20px;
+}
+
+
+/* Styles for the host's lobby screen */
+#lobby h3{
+    margin: 18px 0 16px;
+    font-family: var(--display);
+    font-size: clamp(64px, 7.5vw, 118px);
+    font-weight: 900;
+    letter-spacing: -.01em;
+    line-height: .95;
+    margin-bottom: 40px;
+}
+
+#lobby h3 em{
+    color: var(--accent);
+    font-style: normal;
+}
+
+.join-address, .qr_code, .players { 
+    min-width: 0; 
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 20px; 
+    border: 1px solid var(--line); 
+    border-radius: calc(var(--radius) * .75); 
+    background: var(--surface); 
+    margin-right: 20px;
+}
+
+#player-list li{
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+#lobby p{
+    max-width: fit-content;
+}
+
+.code_and_players{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 13px;
+}
+
+#join-qr { 
+    border-radius: 5px; 
+    background: #fff; 
+}
+
+/* Styles for the final results screen */
+.podium{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.top_five{
+    margin-bottom: 20px;
+    padding: 22px 25px;
+    border: 1px solid var(--line);
+    border-radius: calc(var(--radius) * .75);
+    background: var(--surface);
+}
+
+.top_five p{
+    margin: 0;
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .2em;
+}
+
+.top_five ol{
+    padding: 0;
+    margin: 12px 20px 0;
+}
+
+/* Styles for player's join screen */
+#player-name
+{
+    width: 50%;
+    padding: 15px;
+    border: 1px solid var(--line);
+    border-radius: calc(var(--radius) / 2);
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 16px;
+    outline: none;
+}
+
+#join-form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Styles for the question screen */
+.timer_area{
+    display: flex;
+    align-items: center;
+}
+
+#question-prompt{
+    margin: 18px 0 16px;
+    font-family: var(--display);
+    font-size: 50px;
+    font-weight: 900;
+    letter-spacing: -.01em;
+    line-height: .95;
+    margin-bottom: 40px;
+}
+
+.possible_answer{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-height: 75px;
+    width: fit-content;
+    padding: 12px 17px;
+    border: 1px solid var(--line);
+    border-radius: calc(var(--radius) / 2);
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 19px;
+    font-weight: 800;
+}
+
+#answer-options { 
+    display: grid; 
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+}
+
+
+
+#choices li { 
+    margin-bottom: 0.5rem; 
+}
+
+
+#answer-options button {
+    width: 100%; 
+    padding: 1rem; 
+    text-align: left; 
+}
+
+button, input { 
+    font: inherit; 
+}
+
+button { 
+    cursor: pointer;
+}
+
+button:disabled { 
+    cursor: default; 
+}
+
+/* Represses the autofill style */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+input:autofill,
+textarea:autofill,
+select:autofill {
+    box-shadow: 0 0 0 1000px var(--surface) inset !important;
+    -webkit-box-shadow: 0 0 0 1000px var(--surface) inset !important;
+
+    -webkit-text-fill-color: var(--ink) !important;
+
+  /* Prevents a brief flash of the browser's default autofill color */
+    transition: background-color 9999s ease-in-out 0s;
+}
