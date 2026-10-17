@@ -1,6 +1,8 @@
 const API = "http://127.0.0.1:8000";
 const byId = (id) => document.getElementById(id);
-const previewQuestion = new URLSearchParams(location.search).get("preview") === "question";
+const previewMode = new URLSearchParams(location.search).get("preview");
+const previewQuestion = previewMode === "question";
+const previewResults = previewMode === "results";
 const hostId = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
 let refreshing = false;
 let lastPhase = "";
@@ -11,6 +13,15 @@ const previewState = {
     prompt: "Which planet is known as the Red Planet?",
     choices: ["Venus", "Mars", "Jupiter", "Mercury"],
   },
+};
+const previewResultsState = {
+  phase: "finished", end_reason: "completed",
+  winners: ["Malik"],
+  top_five: [
+    { name: "Malik", score: 500 }, { name: "Taylor", score: 400 },
+    { name: "Alice", score: 400 }, { name: "Jordan", score: 300 },
+    { name: "Sam", score: 200 },
+  ],
 };
 
 async function request(path, options = {}) {
@@ -61,10 +72,13 @@ function render(state) {
     if (state.phase === "reveal") {
       byId("correct-answer").textContent = `Correct answer: ${state.question.choices[state.correct_answer]}`;
     }
+
   } else if (state.phase === "finished") {
     showSection("results");
+    byId("winner-label").textContent = !state.winners.length ? "Final results" :
+      state.winners.length === 1 ? "And the winner is" : "And the winners are";
     byId("winner").textContent = state.end_reason === "host_left" ? "Game ended early because the host left." :
-      `${state.winners.length === 1 ? "Winner" : "Winners"}: ${state.winners.join(", ")}`;
+      state.winners.join(", ");
     fillList(byId("top-five"), state.top_five, (entry) => `${entry.name} — ${entry.score} points`);
   }
   lastPhase = state.phase;
@@ -96,9 +110,9 @@ async function hostAction(path) {
 
 byId("start-button").addEventListener("click", () => hostAction("/api/start"));
 byId("reset-button").addEventListener("click", () => hostAction("/api/reset"));
-if (previewQuestion) {
-  render(previewState);
-  byId("status").textContent = "Styling preview — this question stays open";
+if (previewQuestion || previewResults) {
+  render(previewQuestion ? previewState : previewResultsState);
+  byId("status").textContent = `Styling preview — ${previewQuestion ? "this question" : "results"} stays open`;
 } else {
   refresh();
   setInterval(refresh, 400);

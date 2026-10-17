@@ -1,8 +1,10 @@
 const API = location.origin;
 const TOKEN_KEY = "quiz-player-token";
 const byId = (id) => document.getElementById(id);
-const previewQuestion = new URLSearchParams(location.search).get("preview") === "question";
-let token = previewQuestion ? "style-preview" : localStorage.getItem(TOKEN_KEY);
+const previewMode = new URLSearchParams(location.search).get("preview");
+const previewQuestion = previewMode === "question";
+const previewResults = previewMode === "results";
+let token = previewQuestion || previewResults ? "style-preview" : localStorage.getItem(TOKEN_KEY);
 let refreshing = false;
 let lastQuestion = 0;
 const previewState = {
@@ -12,6 +14,10 @@ const previewState = {
     prompt: "Which planet is known as the Red Planet?",
     choices: ["Venus", "Mars", "Jupiter", "Mercury"],
   },
+};
+const previewResultsState = {
+  phase: "finished", end_reason: "completed", score: 400,
+  placement: 2, placement_tied: true, player_count: 6,
 };
 
 async function request(path, data) {
@@ -29,13 +35,23 @@ function showSection(id) {
   }
 }
 
-function fillScores(scores) {
-  byId("top-five").replaceChildren();
-  for (const entry of scores) {
-    const li = document.createElement("li");
-    li.textContent = `${entry.name} — ${entry.score} points`;
-    byId("top-five").append(li);
-  }
+function ordinal(place) {
+  if (place % 100 >= 11 && place % 100 <= 13) return `${place}th`;
+  return `${place}${["th", "st", "nd", "rd"][place % 10] || "th"}`;
+}
+
+function playerPlacement(state) {
+  if (state.placement != null) return { rank: state.placement, tied: state.placement_tied };
+
+  // Older running servers still send the top five instead of a player's placement.
+  // Their scores are enough to recover a rank when every higher score is in that list.
+  const scores = state.top_five;
+  if (!Array.isArray(scores) || !scores.length || state.score == null) return null;
+  if (scores.length < state.player_count && state.score < scores[scores.length - 1].score) return null;
+  return {
+    rank: 1 + scores.filter((entry) => entry.score > state.score).length,
+    tied: scores.filter((entry) => entry.score === state.score).length > 1,
+  };
 }
 
 function render(state) {
@@ -83,10 +99,12 @@ function render(state) {
     byId("reveal-score").textContent = state.score;
   } else if (state.phase === "finished") {
     showSection("results-section");
-    byId("winner").textContent = state.end_reason === "host_left" ?
-      "Game ended early because the host left." : state.winners.join(", ");
+    const placement = playerPlacement(state);
+    byId("placement").textContent = placement ?
+      `${placement.tied ? "Tied for " : "You placed "}${ordinal(placement.rank)} of ${state.player_count}` :
+      state.end_reason === "host_left" && state.question_number === 0 ?
+        "Game ended before it started." : "Placement unavailable. Restart the Python server for the next game.";
     byId("final-score").textContent = state.score;
-    fillScores(state.top_five);
   }
 }
 
@@ -133,9 +151,9 @@ byId("join-form").addEventListener("submit", async (event) => {
   }
 });
 
-if (previewQuestion) {
-  render(previewState);
-  byId("status").textContent = "Styling preview — this question stays open";
+if (previewQuestion || previewResults) {
+  render(previewQuestion ? previewState : previewResultsState);
+  byId("status").textContent = `Styling preview — ${previewQuestion ? "this question" : "results"} stays open`;
 } else {
   refresh();
   setInterval(refresh, 400);

@@ -140,11 +140,19 @@ def public_state(player_token=None, host=False):
             state["correct_answer"] = question["answer"]
     if phase == "finished":
         scores = leaderboard()
-        state["top_five"] = scores[:5] if GAME["ever_started"] else []
-        state["winners"] = (
-            [item["name"] for item in scores if item["score"] == scores[0]["score"]]
-            if scores and GAME["end_reason"] == "completed" else []
-        )
+        if host:
+            state["top_five"] = scores[:5] if GAME["ever_started"] else []
+            state["winners"] = (
+                [item["name"] for item in scores if item["score"] == scores[0]["score"]]
+                if scores and GAME["end_reason"] == "completed" else []
+            )
+        elif player and GAME["ever_started"]:
+            state["placement"] = 1 + sum(
+                entry["score"] > player["score"] for entry in PLAYERS.values()
+            )
+            state["placement_tied"] = sum(
+                entry["score"] == player["score"] for entry in PLAYERS.values()
+            ) > 1
     return state
 
 
